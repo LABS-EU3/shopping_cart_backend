@@ -7,7 +7,6 @@ const Seller = require('../../../models/seller')
 let token
 let storeId
 let product1Id
-let product2Id
 
 async function clearDb() {
   await Seller.deleteMany({})
@@ -51,19 +50,6 @@ beforeAll(async () => {
       })
       .set('Authorization', token)
     product1Id = product1.body._id
-
-    const product2 = await request(server)
-      .post('/api/store/products')
-      .send({
-        name: 'Shoes2',
-        description: 'A very nice2',
-        price: 5000,
-        stock: 100,
-        images: ['mee2.jpg', 'us2.jpg'],
-        storeId
-      })
-      .set('Authorization', token)
-    product2Id = product2.body._id
   } catch (error) {
     console.error(error.name, error.message)
   }
@@ -78,7 +64,6 @@ describe('edit stock', () => {
     const response = await request(server)
       .put(`/api/store/products/${product1Id}/stock`)
       .send({ quantity: '' })
-      .set('Authorization', token)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ quantity: 'Quantity is required' })
   })
@@ -87,7 +72,6 @@ describe('edit stock', () => {
     const response = await request(server)
       .put(`/api/store/products/${product1Id}/stock`)
       .send({ quantity: 'aa' })
-      .set('Authorization', token)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ quantity: 'Quantity must be an integer' })
   })
@@ -96,7 +80,6 @@ describe('edit stock', () => {
     const response = await request(server)
       .put(`/api/store/products/${product1Id}/stock`)
       .send({ quantity: -1 })
-      .set('Authorization', token)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({
       quantity: 'Quantity must be greater than zero'
@@ -107,7 +90,6 @@ describe('edit stock', () => {
     const response = await request(server)
       .put(`/api/store/products/5e1defb857aff215deecc4ad/stock`)
       .send({ quantity: '4' })
-      .set('Authorization', token)
     expect(response.status).toBe(404)
     expect(response.body).toEqual({ message: 'No product found' })
   })
@@ -116,7 +98,6 @@ describe('edit stock', () => {
     const response = await request(server)
       .put(`/api/store/products/${product1Id}/stock`)
       .send({ quantity: 4000000 })
-      .set('Authorization', token)
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ message: 'Not enough stock. Re-stock!' })
   })
@@ -125,7 +106,6 @@ describe('edit stock', () => {
     const response = await request(server)
       .put('/api/store/products/wrongid/stock')
       .send({ quantity: 100 })
-      .set('Authorization', token)
     expect(response.status).toBe(500)
     expect(response.body).toBeDefined()
   })
@@ -134,7 +114,6 @@ describe('edit stock', () => {
     const response = await request(server)
       .put(`/api/store/products/${product1Id}/stock`)
       .send({ quantity: 2 })
-      .set('Authorization', token)
     expect(response.status).toBe(200)
     expect(response.body.stock).toBe(8)
   })

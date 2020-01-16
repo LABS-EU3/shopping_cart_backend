@@ -37,6 +37,6 @@ router.delete('/products/:product_id', authenticate, deleteProduct)
 // @route PUT /api/store/products/:product_id/Stock
 // @desc  Edit stock quantity after purchase
 // @access Private
-router.put('/products/:product_id/stock', authenticate, editStock)
+router.put('/products/:product_id/stock', editStock)
 
 module.exports = router
