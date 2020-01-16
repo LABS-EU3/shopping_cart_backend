@@ -20,10 +20,6 @@ function validateStock({ quantity }) {
     errors.quantity = 'Quantity is required'
   }
 
-  //   if (Number.isInteger(quantity)) {
-  //     errors.quantity = 'Quantity must be a positive number'
-  //   }
-
   return {
     errors,
     isValid: isEmpty(errors)
