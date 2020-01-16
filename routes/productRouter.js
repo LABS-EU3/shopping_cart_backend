@@ -4,7 +4,8 @@ const {
   getProducts,
   getOneProduct,
   editProduct,
-  deleteProduct
+  deleteProduct,
+  editStock
 } = require('../controllers/product')
 const authenticate = require('../middleware/authenticateMiddleware')
 
@@ -32,5 +33,10 @@ router.put('/products/:product_id', authenticate, editProduct)
 // @desc Delete a product
 // @access Public
 router.delete('/products/:product_id', authenticate, deleteProduct)
+
+// @route PUT /api/store/products/:product_id/Stock
+// @desc  Edit stock quantity after purchase
+// @access Private
+router.put('/products/:product_id/stock', authenticate, editStock)
 
 module.exports = router

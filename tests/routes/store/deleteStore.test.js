@@ -6,7 +6,7 @@ let token
 let token2
 let storeName
 
-async function clearDb () {
+async function clearDb() {
   await Store.deleteMany({})
 }
 
@@ -44,9 +44,7 @@ beforeAll(async () => {
       seller: response2.body.user.id
     })
     storeName = newStore2.storeName
-    newStore2
-      .save()
-      .catch(err => console.log(err))
+    newStore2.save().catch(err => console.log(err))
   } catch (error) {
     console.error(error.name, error.message)
   }
