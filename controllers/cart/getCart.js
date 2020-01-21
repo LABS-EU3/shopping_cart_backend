@@ -1,6 +1,24 @@
 const Cart = require('../../models/cart')
+const Product = require('../../models/product')
 
-async function getCart (req, res) {
+function populateProducts(cart) {
+  let result = []
+  cart.contents.forEach((item, idx) => {
+    Product.findById({ _id: item.product })
+      .then(product => {
+        if (!product) {
+          result.push(product)
+        }
+        console.log(product)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  })
+  return result
+}
+
+async function getCart(req, res) {
   try {
     const cartId = req.params.cart_id
     const cart = await Cart.findById({ _id: cartId })
@@ -22,6 +40,8 @@ async function getCart (req, res) {
     const storeCart = populatedCart.filter(
       item => String(item._id) === String(cartId)
     )[0]
+
+    populateProducts(storeCart)
 
     const copyOfContents = [...storeCart.contents]
     const details = []
