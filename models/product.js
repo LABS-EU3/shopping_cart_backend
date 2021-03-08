@@ -26,7 +26,11 @@ const productSchema = mongoose.Schema({
     {
       type: String
     }
-  ]
+  ],
+  deleted: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const Product = mongoose.model('product', productSchema)
